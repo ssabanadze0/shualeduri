@@ -1,0 +1,44 @@
+* {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.sell-btn {
+  background-color: #29b24e;
+  color: white;
+  padding: 13px 26px;
+  border-radius: 12px;
+  border: none;
+}
+/* main iamge */
+.hero-section {
+  height: 750px;
+  overflow: hidden;
+}
+
+.hero-section img {
+  object-fit: cover;
+  height: 100%;
+}
+
+.search-box {
+  color: black;
+  text-align: center;
+}
+.object-fit-cover {
+  object-fit: cover;
+}
+/* Green checkboxes */
+.form-check-input {
+  border-color: #29b24e;
+  border-radius: 0.25rem;
+}
+.form-check-input:checked {
+  background-color: #29b24e;
+  border-color: #29b24e;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.15rem rgba(41, 178, 78, 0.25);
+}

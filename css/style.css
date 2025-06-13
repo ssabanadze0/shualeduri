@@ -112,87 +112,35 @@ body {
   border-top-right-radius: 1rem;
 }
 
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(16, 1fr);
-  grid-template-rows: auto auto;
-  grid-template-areas:
-    "nav1 nav2 nav3 nav4 middle1 middle1 middle1 middle1 middle1 middle1 middle1 middle1 social1 social2 social3 social4"
-    "divider divider divider divider divider divider divider divider divider divider divider divider divider divider divider divider"
-    ".     .     .     .     middle2 middle2 middle2 middle2 middle2 middle2 middle2 middle2 .        .        .        .";
-
-  margin: 0 auto;
-  gap: 0.5rem;
+.footer-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-.nav1 {
-  grid-area: nav1;
-}
-.nav2 {
-  grid-area: nav2;
-}
-.nav3 {
-  grid-area: nav3;
-  text-wrap: nowrap;
-}
-.nav4 {
-  grid-area: nav4;
+.footer-link:hover {
+  text-decoration: underline;
 }
 
-.middle1 {
-  grid-area: middle1;
-  text-align: center;
-}
-.footer-divider {
-  grid-area: divider;
-  background-color: #d0d0d0;
-  height: 1px;
-  width: 100%;
-}
-.middle2 {
-  grid-area: middle2;
-  text-align: center;
+footer ul {
+  padding-left: 0;
 }
 
-.social1 {
-  grid-area: social1;
-  text-align: right;
+footer li {
+  line-height: 1.8;
 }
-.social2 {
-  grid-area: social2;
-  text-align: right;
+.sell-button-lift {
+  margin-top: -18px;
 }
-.social3 {
-  grid-area: social3;
-  text-align: right;
-}
-.social4 {
-  grid-area: social4;
-  text-align: right;
-}
-.footer-divider {
-  grid-column: 1 / -1; /* spans all 16 columns */
-  grid-row: 2; /* places it between row 1 and 2 visually */
-  height: 1px;
-  background-color: #d0d0d0;
-  margin: 1rem 0; /* optional spacing */
+.sell-icon-bg {
+  width: 56px;
+  height: 56px;
+  background-color: #29b24e;
+  border-radius: 16px;
 }
 
-/* a {
-    color: white;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
+@media (max-width: 991.98px) {
+  body {
+    padding-bottom: 100px; /* adjust based on your nav height */
   }
-
-  ul {
-    padding: 0;
-    list-style: none;
-  }
-
-  .list-inline-item:not(:last-child) {
-    margin-right: 1rem;
-  }
-} */
+}

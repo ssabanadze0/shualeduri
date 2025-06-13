@@ -10,6 +10,29 @@ body {
 .container {
   background-color: transparent !important;
 }
+.btn-green {
+  background-color: #29b24e !important;
+  color: white;
+  border: none;
+}
+.text-green {
+  color: #29b24e !important;
+}
+.bg-green {
+  background-color: #29b24e !important;
+  color: white;
+}
+.btn-outline-green {
+  color: #29b24e;
+  border: 1px solid #29b24e;
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-green:hover {
+  background-color: #29b24e;
+  color: white;
+}
 
 .sell-btn {
   background-color: #29b24e;
@@ -141,6 +164,10 @@ footer li {
 
 @media (max-width: 991.98px) {
   body {
-    padding-bottom: 100px; /* adjust based on your nav height */
+    padding-bottom: 100px;
+  }
+
+  .row > .col:not(:first-child) {
+    display: none !important;
   }
 }

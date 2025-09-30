@@ -40,3 +40,41 @@ a {
     color-scheme: dark;
   }
 }
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rem;
+  padding: 3rem 1rem;
+  background-color: #a52675;
+  color: #f1f1f1;
+  min-height: 100vh;
+}
+.loader {
+  height: 5px;
+  width: 130px;
+  --c: no-repeat linear-gradient(#111 0 0);
+  background: var(--c), var(--c), #d7b8fc;
+  background-size: 60% 100%;
+  animation: l16 3s infinite;
+  margin: 2rem auto;
+  border-radius: 2px;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+@keyframes l16 {
+  0% {
+    background-position: -150% 0, -150% 0;
+  }
+  66% {
+    background-position: 250% 0, -150% 0;
+  }
+  100% {
+    background-position: 250% 0, 250% 0;
+  }
+}

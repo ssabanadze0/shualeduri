@@ -1,0 +1,135 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  color: #fff;
+  min-height: 100vh;
+  background-color: #a52675;
+}
+
+.title {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.cart {
+  background: #111;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  font-weight: bold;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #333;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #222;
+  gap: 1rem;
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.image {
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.info p {
+  margin: 0.25rem 0 0;
+  color: #aaa;
+  font-size: 0.85rem;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.quantity button {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.quantity button:hover {
+  background: #555;
+}
+
+.price {
+  font-weight: bold;
+  text-align: center;
+  color: #ffca28;
+}
+
+.remove {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.remove:hover {
+  color: #ff4d4d;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+  border-top: 1px solid #333;
+  font-size: 1.2rem;
+}
+
+.checkout {
+  margin-top: 1.5rem;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: #ffca28;
+  color: #111;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.checkout:hover {
+  background-color: #ffd54f;
+}
+
+.back {
+  color: #ccc;
+  margin-top: 2rem;
+  text-decoration: none;
+}

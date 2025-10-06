@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Featured from "@/components/Featured";
 import styles from "./page.module.css";
+import Loader from "@/components/Loader";
 
 function HomePage() {
   const [loading, setLoading] = useState(true);
@@ -16,11 +17,7 @@ function HomePage() {
   }, []);
 
   if (loading) {
-    return (
-      <main className={styles.main}>
-        <div className="loader"></div>
-      </main>
-    );
+    return <Loader />;
   }
   return (
     <main>

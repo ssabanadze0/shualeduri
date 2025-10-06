@@ -37,23 +37,35 @@
   padding: 1rem 0;
   border-bottom: 1px solid #222;
   gap: 1rem;
+  min-height: 100px;
 }
 
 .product {
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-width: 250px;
 }
-
 .image {
   border-radius: 8px;
   object-fit: contain;
+}
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 60px;
+  min-width: 300px;
 }
 
 .info h3 {
   margin: 0;
   font-size: 1rem;
   color: #fff;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .info p {

@@ -1,34 +1,33 @@
 "use client";
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
+import { cache } from "@/utils/dataCache";
+import { fetchAllProducts } from "@/utils/fetchUtils";
 import cardStyles from "@/styles/ProductCard.module.css";
 import pageStyles from "./products.module.css";
+import Loader from "@/components/Loader";
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch("https://fakestoreapi.com/products");
-        const data = await res.json();
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
+    async function loadProducts() {
+      if (cache.products) {
+        setProducts(cache.products);
         setLoading(false);
+        return;
       }
+
+      const data = await fetchAllProducts();
+      cache.products = data;
+      setProducts(data);
+      setLoading(false);
     }
-    fetchData();
+    loadProducts();
   }, []);
 
-  if (loading)
-    return (
-      <main className={pageStyles.main}>
-        <div className="loader"></div>
-      </main>
-    );
+  if (loading) return <Loader />;
 
   return (
     <main className={pageStyles.main}>

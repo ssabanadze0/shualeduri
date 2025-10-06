@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { addToCart } from "@/utils/cartUtils";
+import Loader from "@/components/Loader";
+import { isValidProductId } from "@/utils/validationUtils";
+import { fetchProductById } from "@/utils/fetchUtils";
 import styles from "@/styles/Details.module.css";
 
 function ProductDetails() {
@@ -10,44 +14,27 @@ function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [invalid, setInvalid] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const productId = Number(id);
-
-    if (!Number.isInteger(productId) || productId < 1 || productId > 20) {
+    if (!isValidProductId(id)) {
       setInvalid(true);
       setLoading(false);
       return;
     }
 
-    async function fetchProduct() {
-      try {
-        const res = await fetch(`https://fakestoreapi.com/products/${id}`);
-        const data = await res.json();
+    async function loadProduct() {
+      const data = await fetchProductById(id);
 
-        if (!data || !data.id) {
-          setInvalid(true);
-          return;
-        }
-
-        setProduct(data);
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        setInvalid(true);
-      } finally {
-        setLoading(false);
-      }
+      if (!data || !data.id) setInvalid(true);
+      else setProduct(data);
+      setLoading(false);
     }
 
-    fetchProduct();
+    loadProduct();
   }, [id]);
 
-  if (loading)
-    return (
-      <main className={styles.main}>
-        <div className="loader"></div>
-      </main>
-    );
+  if (loading) return <Loader />;
 
   if (invalid)
     return (
@@ -82,7 +69,20 @@ function ProductDetails() {
           <div className={styles.rating}>
             ⭐ {product.rating.rate} / 5 ({product.rating.count} reviews)
           </div>
-          <button className={styles.button}>Add to Cart</button>
+
+          {message && <div className={styles.notification}>{message}</div>}
+
+          <button
+            className={styles.button}
+            onClick={() => {
+              const msg = addToCart(product);
+              setMessage(msg);
+              setTimeout(() => setMessage(""), 2500);
+            }}
+          >
+            Add to Cart
+          </button>
+
           <Link href="/products" className={styles.back}>
             ← Back to Products
           </Link>

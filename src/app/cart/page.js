@@ -4,36 +4,40 @@ import { FaTrash, FaMinus, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/Cart.module.css";
+import {
+  getCartItems,
+  updateCartItemQuantity,
+  removeCartItem,
+  calculateTotal,
+} from "@/utils/cartUtils";
 
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(stored);
+    setCartItems(getCartItems());
+
+    const handleStorage = () => setCartItems(getCartItems());
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener("cartUpdated", handleStorage);
+
+    return () => {
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("cartUpdated", handleStorage);
+    };
   }, []);
 
-  // ✅ Quantity controls
   const updateQuantity = (id, delta) => {
-    const updated = cartItems.map((item) =>
-      item.id === id
-        ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-        : item
-    );
+    const updated = updateCartItemQuantity(id, delta);
     setCartItems(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
   };
 
-  // ✅ Remove item
   const removeItem = (id) => {
-    const updated = cartItems.filter((item) => item.id !== id);
+    const updated = removeCartItem(id);
     setCartItems(updated);
-    localStorage.setItem("cart", JSON.stringify(updated));
   };
 
-  const total = cartItems
-    .reduce((sum, item) => sum + item.price * item.quantity, 0)
-    .toFixed(2);
+  const total = calculateTotal(cartItems);
 
   if (cartItems.length === 0)
     return (

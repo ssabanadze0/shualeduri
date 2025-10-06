@@ -15,7 +15,7 @@ export default function NotFoundPage() {
     <main className={styles.main}>
       <h1 className={styles.title}>404 — Page Not Found</h1>
       <p className={styles.text}>
-        You'll be redirected to the homepage shortly.
+        You will be redirected to the homepage shortly.
       </p>
       <Link href="/" className={styles.link}>
         Go Home Now

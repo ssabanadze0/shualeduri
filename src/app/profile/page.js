@@ -1,128 +1,28 @@
 "use client";
-import { useState, useEffect } from "react";
-import { loginUser, fetchUsers } from "@/utils/fetchUtils";
-import {
-  saveToken,
-  getToken,
-  clearToken,
-  saveUser,
-  getUser,
-  clearUser,
-} from "@/utils/userUtils";
+import { useEffect, useState } from "react";
+import { getToken, getUser, clearToken, clearUser } from "@/utils/userUtils";
 import Loader from "@/components/Loader";
 import styles from "@/styles/Profile.module.css";
+import { useRouter } from "next/navigation";
 
 function ProfilePage() {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const savedToken = getToken();
     const savedUser = getUser();
 
-    if (savedToken) setToken(savedToken);
-    if (savedUser) setUser(savedUser);
+    if (!savedToken || !savedUser) {
+      router.push("/profile/login");
+    } else {
+      setToken(savedToken);
+      setUser(savedUser);
+    }
   }, []);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const receivedToken = await loginUser(username, password);
-
-      if (!receivedToken) {
-        setError("Invalid username or password");
-        setLoading(false);
-        return;
-      }
-
-      saveToken(receivedToken);
-      setToken(receivedToken);
-
-      const users = await fetchUsers();
-      const currentUser = users.find((u) => u.username === username);
-
-      if (currentUser) {
-        saveUser(currentUser);
-        setUser(currentUser);
-      } else {
-        setError("User not found");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLogout = () => {
-    clearToken();
-    clearUser();
-    setToken(null);
-    setUser(null);
-  };
-
-  if (loading) return <Loader />;
-
-  if (!token) {
-    return (
-      <main className={styles.main}>
-        <h2>Login</h2>
-        <form onSubmit={handleLogin} className={styles.form}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button type="submit">Login</button>
-        </form>
-        {error && <p className={styles.error}>{error}</p>}
-        <div className={styles.demoUsers}>
-          <h4>Demo Users:</h4>
-          <ul>
-            <li>
-              <strong>johnd</strong> / m38rmF$
-            </li>
-            <li>
-              <strong>mor_2314</strong> / 83r5^_
-            </li>
-            <li>
-              <strong>kevinryan</strong> / kev02937@
-            </li>
-            <li>
-              <strong>donero</strong> / ewedon
-            </li>
-            <li>
-              <strong>derek</strong> / jklg*_56
-            </li>
-          </ul>
-        </div>
-      </main>
-    );
-  }
-
-  if (!user) {
-    return (
-      <main className={styles.main}>
-        <h2>Loading user data...</h2>
-        <Loader />
-      </main>
-    );
-  }
+  if (!user) return <Loader />;
 
   return (
     <main>
@@ -132,7 +32,7 @@ function ProfilePage() {
             src={`https://i.pravatar.cc/200?u=${
               user?.id || user?.username || "default"
             }`}
-            alt={user?.username || "User avatar"}
+            alt={user?.username}
             className={styles.avatar}
           />
         </div>
@@ -160,8 +60,16 @@ function ProfilePage() {
           <p>
             <strong>Zipcode:</strong> {user?.address?.zipcode}
           </p>
-
-          <button onClick={handleLogout} className={styles.logoutBtn}>
+          <button
+            onClick={() => {
+              clearToken();
+              clearUser();
+              setToken(null);
+              setUser(null);
+              router.push("/profile/login");
+            }}
+            className={styles.logoutBtn}
+          >
             Logout
           </button>
         </div>

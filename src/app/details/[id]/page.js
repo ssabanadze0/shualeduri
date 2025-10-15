@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { addToCart } from "@/utils/cartUtils";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/lib/slices/cartSlice";
 import Loader from "@/components/Loader";
 import { isValidProductId } from "@/utils/validationUtils";
 import { fetchProductById } from "@/utils/fetchUtils";
@@ -11,6 +12,7 @@ import styles from "@/styles/Details.module.css";
 
 function ProductDetails() {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [invalid, setInvalid] = useState(false);
@@ -75,9 +77,9 @@ function ProductDetails() {
           <button
             className={styles.button}
             onClick={() => {
-              const msg = addToCart(product);
-              setMessage(msg);
-              setTimeout(() => setMessage(""), 2500);
+              dispatch(addToCart(product));
+              setMessage(`${product.title} added to cart!`);
+              setTimeout(() => setMessage(""), 2000);
             }}
           >
             Add to Cart

@@ -1,28 +1,25 @@
 "use client";
-import { useState, useEffect } from "react";
+
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import styles from "@/styles/NavBar.module.css";
 import { FaHome, FaTags, FaUserCircle, FaShoppingCart } from "react-icons/fa";
-import { getCartCount } from "@/utils/cartUtils";
 
 function NavBar() {
   const pathname = usePathname();
-  const [cartCount, setCartCount] = useState(0);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setCartCount(getCartCount());
-
-    const handleStorage = () => setCartCount(getCartCount());
-    window.addEventListener("storage", handleStorage); ///sxva tabebi ro gaxsnas
-    const handleCartUpdate = () => setCartCount(getCartCount());
-    window.addEventListener("cartUpdated", handleCartUpdate);
-    return () => {
-      window.removeEventListener("storage", handleStorage);
-      window.removeEventListener("cartUpdated", handleCartUpdate);
-    };
+    setIsClient(true);
   }, []);
+
+  const cartCount = useSelector((state) =>
+    state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
+  );
+
   const links = [
     { href: "/", label: "Home", icon: <FaHome /> },
     { href: "/products", label: "Products", icon: <FaTags /> },
@@ -52,8 +49,9 @@ function NavBar() {
             >
               <span className={styles.icon}>
                 {link.icon}
-                {link.label === "Cart" && cartCount > 0 && (
-                  <span className={styles.badge}>{cartCount}</span>
+
+                {isClient && link.label === "Cart" && cartCount > 0 && (
+                  <div className={styles.badge}>{cartCount}</div>
                 )}
               </span>
               <span>{link.label}</span>

@@ -1,45 +1,32 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { FaTrash, FaMinus, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/Cart.module.css";
 import {
-  getCartItems,
-  updateCartItemQuantity,
-  removeCartItem,
-  calculateTotal,
-} from "@/utils/cartUtils";
+  updateQuantity,
+  removeFromCart,
+  clearCart,
+} from "@/lib/slices/cartSlice";
 
 function CartPage() {
-  const [cartItems, setCartItems] = useState([]);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
 
-  useEffect(() => {
-    setCartItems(getCartItems());
-
-    const handleStorage = () => setCartItems(getCartItems());
-    window.addEventListener("storage", handleStorage);
-    window.addEventListener("cartUpdated", handleStorage);
-
-    return () => {
-      window.removeEventListener("storage", handleStorage);
-      window.removeEventListener("cartUpdated", handleStorage);
-    };
-  }, []);
-
-  const updateQuantity = (id, delta) => {
-    const updated = updateCartItemQuantity(id, delta);
-    setCartItems(updated);
+  const handleUpdate = (id, delta) => {
+    dispatch(updateQuantity({ id, delta }));
   };
 
-  const removeItem = (id) => {
-    const updated = removeCartItem(id);
-    setCartItems(updated);
+  const handleRemove = (id) => {
+    dispatch(removeFromCart(id));
   };
 
-  const total = calculateTotal(cartItems);
+  const total = cartItems
+    .reduce((sum, item) => sum + item.price * item.quantity, 0)
+    .toFixed(2);
 
-  if (cartItems.length === 0)
+  if (cartItems.length === 0) {
     return (
       <main className={styles.main}>
         <h2>Your cart is empty 🛒</h2>
@@ -48,6 +35,7 @@ function CartPage() {
         </Link>
       </main>
     );
+  }
 
   return (
     <main className={styles.main}>
@@ -76,11 +64,11 @@ function CartPage() {
             </div>
 
             <div className={styles.quantity}>
-              <button onClick={() => updateQuantity(item.id, -1)}>
+              <button onClick={() => handleUpdate(item.id, -1)}>
                 <FaMinus />
               </button>
               <span>{item.quantity}</span>
-              <button onClick={() => updateQuantity(item.id, +1)}>
+              <button onClick={() => handleUpdate(item.id, +1)}>
                 <FaPlus />
               </button>
             </div>
@@ -91,7 +79,7 @@ function CartPage() {
 
             <button
               className={styles.remove}
-              onClick={() => removeItem(item.id)}
+              onClick={() => handleRemove(item.id)}
             >
               <FaTrash />
             </button>

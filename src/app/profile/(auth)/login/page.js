@@ -80,7 +80,7 @@ function LoginForm() {
           <input type="checkbox" {...register("stayLoggedIn")} />
         </div>
         <p className={styles.registerPrompt}>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <span
             onClick={() => router.push("/profile/register")}
             className={styles.registerLink}

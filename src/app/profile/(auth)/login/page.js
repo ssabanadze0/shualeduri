@@ -1,70 +1,86 @@
 "use client";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 import { useState } from "react";
-import { loginUser, fetchUsers } from "@/utils/fetchUtils";
-import { saveToken, saveUser } from "@/utils/userUtils";
 import { useRouter } from "next/navigation";
+import { loginUser, fetchUsers } from "@/utils/fetchUtils";
 import styles from "@/styles/Profile.module.css";
 
+const schema = Yup.object().shape({
+  username: Yup.string().trim().required("Username is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(4, "Password must be at least 4 characters"),
+});
+
 function LoginForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const onSubmit = async (data) => {
     setError("");
+    const { token, error: loginError } = await loginUser(
+      data.username,
+      data.password
+    );
 
-    try {
-      const token = await loginUser(username, password);
-
-      if (!token) {
-        setError("Invalid username or password");
-        setLoading(false);
-        return;
-      }
-
-      saveToken(token);
-
-      const users = await fetchUsers();
-      const currentUser = users.find((u) => u.username === username);
-
-      if (currentUser) {
-        saveUser(currentUser);
-        router.push("/profile");
-      } else {
-        setError("User not found");
-      }
-    } catch (err) {
-      setError("Something went wrong");
-    } finally {
-      setLoading(false);
+    if (loginError) {
+      setError(loginError);
+      return;
     }
+
+    if (data.stayLoggedIn) {
+      localStorage.setItem("token", token);
+    } else {
+      sessionStorage.setItem("token", token);
+    }
+
+    const users = await fetchUsers();
+    const currentUser = users.find((u) => u.username === data.username);
+
+    if (currentUser) {
+      const storage = data.stayLoggedIn ? localStorage : sessionStorage;
+      storage.setItem("user", JSON.stringify(currentUser));
+    }
+
+    router.push("/profile");
   };
 
   return (
     <main className={styles.main}>
       <h2>Login</h2>
-      <form onSubmit={handleLogin} className={styles.form}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        <input type="text" placeholder="Username" {...register("username")} />
+        {errors.username && (
+          <p className={styles.error}>{errors.username.message}</p>
+        )}
         <input
           type="password"
           placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          {...register("password")}
         />
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+        {errors.password && (
+          <p className={styles.error}>{errors.password.message}</p>
+        )}
+        <button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Logging in..." : "Login"}
         </button>
+        <div className={styles.checkboxContainer}>
+          <span className={styles.checkboxLabel}>Stay logged in</span>
+          <input type="checkbox" {...register("stayLoggedIn")} />
+        </div>
         <p className={styles.registerPrompt}>
-          "Don't have an account?"{" "}
+          Don't have an account?{" "}
           <span
             onClick={() => router.push("/profile/register")}
             className={styles.registerLink}

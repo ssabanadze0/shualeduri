@@ -11,8 +11,17 @@ function ProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
-    const savedToken = getToken();
-    const savedUser = getUser();
+    let savedToken = getToken();
+    let savedUser = getUser();
+
+    if (!savedToken || !savedUser) {
+      const sessionToken = sessionStorage.getItem("token");
+      const sessionUser = sessionStorage.getItem("user");
+      if (sessionToken && sessionUser) {
+        savedToken = sessionToken;
+        savedUser = JSON.parse(sessionUser);
+      }
+    }
 
     if (!savedToken || !savedUser) {
       router.push("/profile/login");
@@ -20,7 +29,7 @@ function ProfilePage() {
       setToken(savedToken);
       setUser(savedUser);
     }
-  }, []);
+  }, [router]);
 
   if (!user) return <Loader />;
 
@@ -64,6 +73,8 @@ function ProfilePage() {
             onClick={() => {
               clearToken();
               clearUser();
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("user");
               setToken(null);
               setUser(null);
               router.push("/profile/login");

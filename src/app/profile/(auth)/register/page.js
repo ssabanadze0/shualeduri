@@ -39,7 +39,7 @@ const schema = yup.object().shape({
     .required("Phone is required")
     .matches(/^[0-9]+$/, "Only digits allowed")
     .min(10, "Minimum 10 digits")
-    .max(100, "Maximum 100 digits"),
+    .max(100, "Maximum 20 digits"),
 });
 
 function RegisterPage() {

@@ -89,3 +89,18 @@
   transform: translateY(-2px);
   transition: all 0.3s ease;
 }
+.themeToggle {
+  background: none;
+  border: 1px solid var(--foreground);
+  color: var(--foreground);
+  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+.themeToggle:hover {
+  background: var(--foreground);
+  color: var(--background);
+}

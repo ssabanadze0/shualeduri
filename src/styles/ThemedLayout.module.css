@@ -1,0 +1,19 @@
+.layout {
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.purple {
+  background-color: #a52675;
+  color: #ffffff;
+}
+
+.light {
+  background-color: #f8f3f3 !important;
+  color: #fbf8f8 !important;
+}
+.light h1,
+.light .featured,
+.light h2 {
+  color: #000 !important;
+}

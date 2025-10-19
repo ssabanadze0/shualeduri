@@ -3,7 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "@/lib/slices/themeSlice";
 import { useEffect, useState } from "react";
 import styles from "@/styles/NavBar.module.css";
 import { FaHome, FaTags, FaUserCircle, FaShoppingCart } from "react-icons/fa";
@@ -11,6 +12,8 @@ import { FaHome, FaTags, FaUserCircle, FaShoppingCart } from "react-icons/fa";
 function NavBar() {
   const pathname = usePathname();
   const [isClient, setIsClient] = useState(false);
+  const dispatch = useDispatch();
+  const theme = useSelector((state) => state.theme.mode);
 
   useEffect(() => {
     setIsClient(true);
@@ -57,7 +60,14 @@ function NavBar() {
               <span>{link.label}</span>
             </Link>
           </li>
-        ))}
+        ))}{" "}
+        <button
+          onClick={() => dispatch(toggleTheme())}
+          className={styles.themeToggle}
+          aria-label="Toggle Theme"
+        >
+          {theme === "light" ? "🌙" : "☀️"}
+        </button>
       </ul>
     </nav>
   );

@@ -4,11 +4,7 @@ import { FaTrash, FaMinus, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "@/styles/Cart.module.css";
-import {
-  updateQuantity,
-  removeFromCart,
-  clearCart,
-} from "@/lib/slices/cartSlice";
+import { updateQuantity, removeFromCart } from "@/lib/slices/cartSlice";
 
 function CartPage() {
   const dispatch = useDispatch();
